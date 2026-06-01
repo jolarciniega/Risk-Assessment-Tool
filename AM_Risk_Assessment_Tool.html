@@ -430,7 +430,7 @@ function calculateProbability(){
   Object.values(windows).forEach(w=>{w.fr=(w.occ>0&&w.ops>0)?(w.ops/w.occ):Infinity;});
   state.probability=null;state.probabilityResult={windows};state.probCriterion="";
   if(first){
-    const result={level:1,label:CONFIG.probabilityLevels[1],frequency:Infinity,window:"5 años",criterion:"Primer registro / sin histórico disponible",justification:"Sin histórico aplicable; se asigna Nivel 1 conforme al modelo.",early:false,windows};
+    const result={level:1,label:CONFIG.probabilityLevels[1],frequency:Infinity,window:"5 años",criterion:"Primer registro / sin histórico disponible",justification:"Sin histórico aplicable; se asigna Nivel 1 conforme al modelo.",early:early,windows};
     state.probability=result.level;state.probabilityResult=result;state.probCriterion=`Criterio aplicado: ${result.criterion}`;return;
   }
   const hasData=Object.values(windows).some(w=>(w.occ>0&&w.ops>0)||(w.occ===0&&w.ops>0));
@@ -588,3 +588,4 @@ init();
 </script>
 </body>
 </html>
+
