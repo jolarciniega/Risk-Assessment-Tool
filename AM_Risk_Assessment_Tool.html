@@ -430,7 +430,7 @@ function calculateProbability(){
   Object.values(windows).forEach(w=>{w.fr=(w.occ>0&&w.ops>0)?(w.ops/w.occ):Infinity;});
   state.probability=null;state.probabilityResult={windows};state.probCriterion="";
   if(first){
-    const result={level:1,label:CONFIG.probabilityLevels[1],frequency:Infinity,window:"5 años",criterion:"Primer registro / sin histórico disponible",justification:"Sin histórico aplicable; se asigna Nivel 1 conforme al modelo.",early:early,windows};
+    const result={level:1,label:CONFIG.probabilityLevels[1],frequency:Infinity,window:"5 años",criterion:"Primer registro / sin histórico disponible",justification:"Sin histórico aplicable; se asigna Nivel 1 conforme al modelo.",early:false,windows};
     state.probability=result.level;state.probabilityResult=result;state.probCriterion=`Criterio aplicado: ${result.criterion}`;return;
   }
   const hasData=Object.values(windows).some(w=>(w.occ>0&&w.ops>0)||(w.occ===0&&w.ops>0));
@@ -438,14 +438,10 @@ function calculateProbability(){
   const e=CONFIG.probabilityCriteria.earlyAlert;
   const early=e.enabled && windows.m3.occ>0 && windows.m3.ops>0 && (windows.m3.occ>=e.minRecentOccurrences || (windows.y1.occ>0 && windows.m3.occ/windows.y1.occ>=e.recentShareOfYear));
   let result;
-  if(early){
-    result={level:e.forceLevel,label:CONFIG.probabilityLevels[e.forceLevel],frequency:windows.m3.fr,window:"3 meses",criterion:e.label,justification:"Concentración reciente detectada automáticamente en la ventana de 3 meses.",early:true,windows};
-  }else{
-    const hit=CONFIG.probabilityCriteria.thresholds.find(t=>{const fr=windows[t.field].fr; return Number.isFinite(fr)&&fr>=t.min&&fr<=t.max;});
-    if(hit){result={level:hit.level,label:hit.label,frequency:windows[hit.field].fr,window:hit.period,criterion:`Fr ${formatFr(windows[hit.field].fr)} · ${hit.period}`,justification:hit.definition,early:false,windows};}
-    else if(windows.y5.ops>0 && windows.y5.occ===0){result={level:1,label:CONFIG.probabilityLevels[1],frequency:Infinity,window:"5 años",criterion:"Sin antecedentes en 5 años",justification:"No se registran ocurrencias en el histórico disponible.",early:false,windows};}
-    else {result={level:1,label:CONFIG.probabilityLevels[1],frequency:windows.y5.fr,window:"5 años",criterion:"Fuera de umbrales superiores",justification:"La frecuencia calculada se mantiene en el rango improbable configurado.",early:false,windows};}
-  }
+  const hit=CONFIG.probabilityCriteria.thresholds.find(t=>{const fr=windows[t.field].fr; return Number.isFinite(fr)&&fr>=t.min&&fr<=t.max;});
+  if(hit){result={level:hit.level,label:hit.label,frequency:windows[hit.field].fr,window:hit.period,criterion:`Fr ${formatFr(windows[hit.field].fr)} · ${hit.period}`,justification:early?`${hit.definition} Alerta temprana registrada como señal complementaria, sin reclasificar automáticamente.`:hit.definition,early,windows};}
+  else if(windows.y5.ops>0 && windows.y5.occ===0){result={level:1,label:CONFIG.probabilityLevels[1],frequency:Infinity,window:"5 años",criterion:"Sin antecedentes en 5 años",justification:"No se registran ocurrencias en el histórico disponible.",early,windows};}
+  else {result={level:1,label:CONFIG.probabilityLevels[1],frequency:windows.y5.fr,window:"5 años",criterion:"Fuera de umbrales superiores",justification:"La frecuencia calculada se mantiene en el rango improbable configurado.",early,windows};}
   state.probability=result.level; state.probabilityResult=result; state.probCriterion=`Criterio aplicado: ${result.criterion}`;
 }
 function calculateRisk(){
@@ -588,4 +584,3 @@ init();
 </script>
 </body>
 </html>
-
