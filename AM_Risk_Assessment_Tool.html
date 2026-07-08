@@ -93,7 +93,7 @@
   <section class="print-report" id="printReport" aria-label="Risk Assessment Summary Report">
     <header class="print-header">
       <div class="print-brand"><img id="printSafetyLogo" class="print-logo-safety" alt="Safety Investigation"><div class="print-title-block"><p class="print-kicker">Safety Investigation</p><h1>Risk Assessment Tool</h1><p>Severidad · Probabilidad · Nivel de Riesgo</p></div></div>
-      <div class="print-docs"><div><strong>Versión</strong> <span id="printToolVersion">1.0</span></div><div><strong>Severity Handbook</strong> <span id="printHandbookRev">Rev. Mayo 2026</span></div><div><strong>Modelo de Probabilidad</strong> <span id="printProbModelRev">Mayo/2026</span></div><div><strong>Manual SMS</strong> <span id="printSmsManualRev">Reed. 02/2026</span></div></div>
+      <div class="print-docs"><div><strong>Versión</strong> <span id="printToolVersion">1.0</span></div><div><strong>Severity Handbook</strong> <span id="printHandbookRev">Rev. Junio 2026</span></div><div><strong>Modelo de Probabilidad</strong> <span id="printProbModelRev">Mayo/2026</span></div><div><strong>Manual SMS</strong> <span id="printSmsManualRev">Reed. 02/2026</span></div></div>
       <div class="print-date" id="printDate">Fecha de generación: —</div>
     </header>
     <section class="print-hero">
@@ -121,7 +121,7 @@
 const CONFIG={
   toolVersion:"1.0",
   version:"1.0",
-  severityHandbookVersion:"Rev. Mayo 2026",
+  severityHandbookVersion:"Rev. Junio 2026",
   probabilityModelVersion:"Mayo/2026",
   smsManualVersion:"Reed. 02/2026",
   updateDate:"31 Mayo 2026",
@@ -157,8 +157,8 @@ const CONFIG={
   families:[
     {id:"people",name:"Personas y lesiones",hint:"Pasajeros, tripulación, personal en tierra o terceros.",events:["injury","turbulence"]},
     {id:"aircraft",name:"Daño o condición de aeronave",hint:"Daño físico, condición técnica o afectación estructural.",events:["aircraftDamage","birdstrike","tireBrake","aircraftMalfunction"]},
-    {id:"nav",name:"Navegación y trayectoria",hint:"Trayectoria, separación, perfil vertical, banqueo o velocidad.",events:["navError","cfit","mac","bankAngle","airspeed","windshear","navSystem"]},
-    {id:"runway",name:"Pista y movimiento",hint:"Pista, taxeo, incursión, excursión y movimiento no comandado.",events:["runwayExcursion","runwayIncursion","rto","wrongRunway","taxiClearance","groundConflict","uam"]},
+    {id:"nav",name:"Navegación y trayectoria",hint:"Trayectoria, separación, perfil vertical, banqueo o velocidad.",events:["navError","cfit","unstableApproach","mac","bankAngle","airspeed","windshear","navSystem"]},
+    {id:"runway",name:"Pista y movimiento",hint:"Pista, taxeo, incursión, excursión y movimiento no comandado.",events:["runwayExcursion","runwayIncursion","hardLanding","rto","wrongRunway","taxiClearance","groundConflict","uam"]},
     {id:"systems",name:"Sistemas y configuración",hint:"Configuración, MEL, combustible, peso y balance, puertas.",events:["flapSlat","weightBalance","fuelLoading","baggageLoading","doorClosure","melError","exceedance","landingGear","fuelManagement"]},
     {id:"emergency",name:"Emergencias y cabina",hint:"Evacuación, humo/fuego, presión, oxígeno, PED o salidas.",events:["evacuation","cabinOxygen","pressurization","smokeFire","pedBattery","slideDeployment","exitObstruction"]},
     {id:"external",name:"Factores externos",hint:"Aves, láser, ATC, windshear u otras amenazas externas.",events:["laser","birdstrike","atcComms","windshear"]}
@@ -169,9 +169,12 @@ const CONFIG={
     aircraftDamage:{name:"Aircraft Damage",applies:"Daño físico a cualquier aeronave involucrada, estético o estructural.",question:"Seleccione el mayor daño confirmado",choices:[c(5,"Hull Loss / aeronave destruida","Daño irreparable o aeronave permanentemente fuera de servicio."),c(4,"Substantial Damage","Daño estructural que afecta resistencia, performance, características de vuelo o aeronavegabilidad."),c(3,"Major Damage","Daño relevante con inspección detallada, reparación significativa o limitaciones operacionales."),c(2,"Minor Damage","Reparación simple o manejo MEL sin comprometer aeronavegabilidad."),c(1,"Cosmetic Damage","Daño estético, rayaduras o marcas superficiales sin acción operacional significativa.")]},
     birdstrike:{name:"Birdstrike / Wildlife",applies:"Colisión, ingestión, cuasi colisión o avistamiento de aves/fauna.",question:"Seleccione el efecto operacional observado",choices:[c(5,"Impacto con destrucción, pérdida de control o fatalidad","Criterio equivalente a daño irreparable, accidente o lesión fatal."),c(4,"Amenaza inmediata a la seguridad del vuelo","Pérdida de desempeño, vibración severa, fuego, emergencia o acción inmediata para mantener parámetros."),c(3,"Daño o afectación significativa sin pérdida de control","Apagado preventivo, retorno/desvío, reparación relevante o afectación de sistemas."),c(2,"Daño menor / inspección","Sin afectación de performance o controlabilidad; requiere inspección o mantenimiento."),c(1,"Avistamiento o impacto sin daño","Sin afectación operacional ni acción correctiva significativa.")]},
     cfit:{name:"CFIT / GPWS / EGPWS",applies:"Aeronave bajo control impacta o se aproxima a terreno, agua u obstáculo sin pérdida de control previa.",question:"Seleccione la alerta o condición alcanzada",choices:[c(5,"CFIT Impact","Colisión controlada contra terreno, agua u obstáculo que compromete aeronavegabilidad."),c(4,"EGPWS Pull-Up","Alerta Pull Up que requiere maniobra inmediata de escape."),c(3,"EGPWS Warning","Alerta warning con degradación significativa del perfil vertical y corrección inmediata."),c(2,"EGPWS Caution sostenida / aproximación inestable continuada","Degradación sin escalar a warning o aproximación inestable que continúa al aterrizaje."),c(1,"Precursor corregido / go-around","Condición precursora con ida al aire o caution en VMC sin progresión.")]},
+    unstableApproach:{name:"Unstable Approach",applies:"Aproximación inestable evaluada por altura AGL, recuperación de condición estable, Go Around/Balked/Rejected Landing y eventos concurrentes.",question:"Seleccione la condición observada",choices:[c(3,"<100 ft AGL sin estabilidad y con evento concurrente","No recupera condición estable, o la recupera por debajo de 100 ft AGL, con al menos un evento concurrente relevante."),c(2,"Go Around <500 ft / recuperación 500-100 ft / <100 ft sin concurrentes","Go Around por debajo de 500 ft AGL; recuperación entre 500 y 100 ft AGL con continuación/Balked/Rejected Landing; o <100 ft AGL sin eventos concurrentes adicionales."),c(1,"Go Around o recuperación estable entre 1000 y 500 ft","Go Around entre 1000 y 500 ft AGL, o recuperación de condición estable entre 1000 y 500 ft AGL con continuación/Balked/Rejected Landing.")]},
     mac:{name:"MAC / TCAS / pérdida de separación",applies:"Airprox, ACAS, pérdida de separación, NMAC o colisión en vuelo.",question:"Seleccione la condición de separación o alerta",choices:[c(5,"Colisión en vuelo","Compromete aeronavegabilidad, daño estructural, pérdida de control o lesiones graves/fatales."),c(4,"NMAC / conflicto severo","Proximidad crítica, <500 ft vertical, <0.5 NM lateral o maniobra evasiva mayor."),c(3,"TCAS RA increased corrective / intervención urgente","Comandos correctivos encadenados o pérdida de separación con intervención urgente ATC."),c(2,"TCAS RA corrective","Acción correctiva sin proximidad crítica ni maniobra brusca."),c(1,"TCAS TA / RA preventive","Sin conflicto significativo ni maniobra correctiva relevante.")]},
     navError:{name:"NAV: Navigation Error",applies:"Navegación incorrecta en tierra o vuelo, incluyendo desviación lateral, vertical, velocidad o autorización.",question:"Seleccione el impacto de la desviación",choices:[c(3,"Compromete seguridad del espacio aéreo","GNE >10 NM, airspace incursion con pérdida de separación, LHD/RVSM ≥300 ft o intervención inmediata ATC."),c(2,"Desviación no reconocida oportunamente sin conflicto","Fuera de tolerancias, sin pérdida de separación ni intervención urgente ATC."),c(1,"Precursor corregido de inmediato","Dentro de tolerancias operacionales, sin conflicto, sin pérdida de separación ni intervención ATC.")]},
     runwayExcursion:{name:"Runway Excursion",applies:"Salida parcial/total de pista o degradación medible del margen para detener o despegar.",question:"Seleccione la condición de excursión o precursor",choices:[c(5,"Excursión con pérdida total o fatalidades","Pérdida total de aeronave o lesiones fatales."),c(4,"Excursión alta velocidad / daño substantial","Salida >30 kt, alta energía, lesión grave o substantial damage."),c(3,"Excursión a velocidad de taxeo","Salida ≤30 kt, lesiones no graves o daños sin impacto estructural."),c(2,"Precursor con margen reducido medible","Sin salida, pero con margen de pista/frenado/aceleración-detención significativamente reducido."),c(1,"Precursor sin degradación relevante","Desviación sin daño, lesión ni pérdida significativa de control.")]},
+    runwayIncursion:{name:"Runway Incursion",applies:"Incursión de pista clasificada por categoría FAA D a A y cercanía/conflicto potencial.",question:"Seleccione la categoría o condición observada",choices:[c(5,"FAA Categoría A / acción evasiva muy cercana","Incursión donde se tomó acción evasiva muy cerca de otro avión; se evitó por poco la colisión o incidente grave relacionado."),c(4,"FAA Categoría B / peligro de conflicto cercano","Aeronave entre los bordes de la pista con peligro de conflicto cercano; la separación disminuye con potencial colisión y puede requerir acción evasiva."),c(3,"FAA Categoría C / dentro de pista sin conflicto","Aeronave transita entre los bordes de la pista sin conflicto o con tiempo suficiente para evitarlo."),c(2,"FAA Categoría D / sin consecuencias inmediatas","Nariz sobre línea de espera o presencia de vehículo/persona/avión en pista sin consecuencias inmediatas de seguridad.")]},
+    hardLanding:{name:"Aterrizaje brusco (Hard Landing)",applies:"Aterrizaje con tasa de descenso elevada o excedencia de límites operacionales, con o sin hallazgos técnicos.",question:"Seleccione el impacto técnico confirmado",choices:[c(4,"Daño estructural, sensores de impacto o cambio de aeronave","Peligroso conforme a Hard Landing. Si existe daño estructural, consultar también Aircraft Damage."),c(3,"Excede límites operacionales con hallazgos menores","Requiere inspección detallada y genera hallazgos menores."),c(2,"Dentro de límites operacionales sin hallazgos","Tasa de descenso elevada; requiere inspección visual sin hallazgos.")]},
     bankAngle:{name:"Bank Angle",applies:"Ángulo de banqueo con criterios por ángulo, duración y altura AGL.",mode:"bankAngle",question:"Capture ángulo, duración y altura AGL",choices:[]},
     rto:{name:"Rejected Takeoff (RTO)",applies:"Despegue descontinuado con clasificación por velocidad máxima vs V1 y excursión.",mode:"rto",question:"Capture velocidad máxima, V1 y si hubo excursión",choices:[]},
     groundConflict:{name:"Conflicto de Tierra",applies:"Conflicto entre aeronave, vehículo u obstáculo en tierra.",question:"Seleccione la condición del conflicto",choices:[c(4,"Casi accidente con maniobra extrema","Maniobra extrema para evitar colisión inminente."),c(3,"Parada abrupta o maniobra agresiva","Acción inusual para evitar colisión inminente."),c(2,"Baja velocidad / daño menor / detención oportuna","Conflicto evitado con tiempo suficiente o daños menores.")]},
@@ -410,8 +413,8 @@ function calculateSeverity(){
     if(!v || !v1)return;
     const ratio=v/v1;
     if(ex||v>v1) result=c(4,"RTO > V1 y/o excursión de pista","Peligroso conforme al criterio RTO.");
-    else if(ratio>=.9) result=c(3,"RTO dentro del 10% de V1","Grave por alta energía relativa a V1.");
-    else if(v>80) result=c(2,"RTO >80 kt fuera del 10% de V1","Leve conforme al criterio configurado.");
+    else if(ratio>.9) result=c(3,"RTO >90% de V1 y ≤ V1","Grave por alta energía relativa a V1.");
+    else if(v>80) result=c(2,"RTO >80 kt y ≤90% de V1","Leve conforme al criterio configurado.");
     else result=c(1,"RTO <80 kt","Insignificante conforme al criterio RTO.");
   }else{
     if(state.choiceIndex===null || state.choiceIndex===undefined)return;
@@ -584,3 +587,9 @@ init();
 </script>
 </body>
 </html>
+AM_Risk_Assessment_Tool_Severity_Handbook_Jun2026_codigo_fuente.md
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
